@@ -12,19 +12,29 @@ data = JSON.parse(localStorage.getItem('users'));
 const firstTwenty = data.slice(0, 20);
 createUser(firstTwenty);
 
-function searchUser(d){
-  localStorage.setItem('search', d);
-  setTimeout(() => {
-    if(d.length === 0){
-      userUI.innerHTML = '';
-      createUser(firstTwenty);
-      return;
-    }
-    const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
-    userUI.innerHTML = '';
-    createUser(search);
-  }, 500);
+function debounce(func, delay){
+  let timeoutId;
+  return function(...args){
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  }
 }
+
+function searchUser(d){
+  if(d.length === 0){
+    userUI.innerHTML = '';
+    createUser(firstTwenty);
+  }
+  localStorage.setItem('search', d);
+  const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
+  userUI.innerHTML = '';
+  createUser(search);
+}
+
+const debouncedSearch = debounce((e) => searchUser(e.target.value), 300);
+searchInput.addEventListener('input', debouncedSearch);
 
 function createUser(data){
   console.log(data);
