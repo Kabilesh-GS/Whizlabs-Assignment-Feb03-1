@@ -9,7 +9,8 @@
       <h1>List of GitHub Users</h1>
     </header>
     <form>
-      <input type="text" placeholder="Enter name to search" oninput="searchUser(event.target.value)" />
+      <label for="inputSearch">Search User:</label>
+      <input type="text" placeholder="Enter a name" id="inputSearch" oninput="searchUser(document.getElementById('inputSearch').value)" />
     </form>
     <main id="User-Container">
     </main>
