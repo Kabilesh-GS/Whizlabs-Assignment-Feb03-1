@@ -1,40 +1,43 @@
 const userUI = document.getElementById('User-Container');
-let data;
 const searchInput = document.getElementById('inputSearch');
+let rootData;
 searchInput.value = localStorage.getItem('search');
 
 async function fetchData(){
-  const res = await fetch('https://santhosh1203122.github.io/users_data/users.json');
-  data = await res.json();
-  localStorage.setItem('users', JSON.stringify(data));
-}
-data = JSON.parse(localStorage.getItem('users'));
-const firstTwenty = data.slice(0, 20);
-createUser(firstTwenty);
-
-function debounce(func, delay){
-  let timeoutId;
-  return function(...args){
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
+  try{
+      const res = await fetch('https://santhosh1203122.github.io/users_data/users.json');
+      rootData = await res.json();
+      let firstSet = rootData.slice(0, 20);
+      createUser(firstSet);
+  }
+  catch(err){
+      console.log('Error fetching data:', err);
   }
 }
+fetchData()
+  .then(()=>{
+    console.log(rootData);
+    
+    function searchUser(d){
+      localStorage.setItem('search', d);
+      const filteredData = rootData.filter((e) => (e.login.toLowerCase().includes(d)));
+      userUI.innerHTML = '';
+      createUser(filteredData);
+    }
 
-function searchUser(d){
-  if(d.length === 0){
-    userUI.innerHTML = '';
-    createUser(firstTwenty);
+    function debounce(func, delay){
+      let timeoutId;
+      return function(...args){
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          func(...args);
+        }, delay);
+      }
+    }
+
+    searchInput.addEventListener('input', debounce((e) => searchUser(e.target.value), 500));
   }
-  localStorage.setItem('search', d);
-  const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
-  userUI.innerHTML = '';
-  createUser(search);
-}
-
-const debouncedSearch = debounce((e) => searchUser(e.target.value), 300);
-searchInput.addEventListener('input', debouncedSearch);
+);
 
 function createUser(data){
   console.log(data);
