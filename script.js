@@ -1,14 +1,14 @@
 const userUI = document.getElementById('User-Container');
 const searchInput = document.getElementById('inputSearch');
-let rootData;
+let rootData = [];
 searchInput.value = localStorage.getItem('search');
 
 async function fetchData(){
   try{
       const res = await fetch('https://santhosh1203122.github.io/users_data/users.json');
-      rootData = await res.json();
+      let data = await res.json();
+      rootData = data;
       let firstSet = rootData.slice(0, 20);
-      createUser(firstSet);
   }
   catch(err){
       console.log('Error fetching data:', err);
@@ -33,6 +33,13 @@ fetchData()
           func(...args);
         }, delay);
       }
+    }
+
+    if(localStorage.getItem('search') == ''){
+      createUser(rootData.slice(0, 20));
+    }
+    if(localStorage.getItem('search')){
+      searchUser(localStorage.getItem('search'));
     }
 
     searchInput.addEventListener('input', debounce((e) => searchUser(e.target.value), 500));
