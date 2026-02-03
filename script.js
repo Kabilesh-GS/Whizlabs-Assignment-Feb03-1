@@ -12,13 +12,11 @@ data = JSON.parse(localStorage.getItem('users'));
 createUser(data);
 
 function searchUser(d){
-  if(d.length === 0){
-    createUser(data);
-    console.log(d);
-  }
-  const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
-  userUI.innerHTML = '';
-  createUser(search);
+  setTimeout(() => {
+    const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
+    userUI.innerHTML = '';
+    createUser(search);
+  }, 500);
 }
 
 function createUser(data){
