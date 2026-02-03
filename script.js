@@ -2,15 +2,28 @@ const userUI = document.getElementById('User-Container');
 let data;
 
 async function fetchData(){
-  const res = await fetch('https://api.github.com/users');
+  const res = await fetch('https://santhosh1203122.github.io/users_data/users.json');
   data = await res.json();
-  createUser(data);
+  localStorage.setItem('users', JSON.stringify(data));
+  //createUser(data);
 }
-fetchData();
+//fetchData();
+data = JSON.parse(localStorage.getItem('users'));
+createUser(data);
+
+function searchUser(d){
+  if(d.length === 0){
+    createUser(data);
+    console.log(d);
+  }
+  const search = data.filter((e) => (e.login.toLowerCase().includes(d)));
+  userUI.innerHTML = '';
+  createUser(search);
+}
 
 function createUser(data){
   console.log(data);
-  data.forEach(e => (
+  data.map(e => (
     userUI.innerHTML +=
     `
       <article id="user-list">
