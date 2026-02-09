@@ -1,0 +1,28 @@
+body{
+  font-family: Arial, sans-serif;
+  background-color: rgb(219, 218, 218);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#User-Container{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+section img{
+  width: 100px;
+}
+.user-Box{
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  width: 150px;
+  background-color: white;
+  box-shadow: rgb(95, 95, 95) 3px 3px 10px;
+}
